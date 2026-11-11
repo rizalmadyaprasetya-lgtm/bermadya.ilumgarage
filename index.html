@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bermadya - Ilume Garage- for link</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#050811',
+                        cardBg: 'rgba(15, 23, 42, 0.75)',
+                        discordColor: '#5865F2'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CSS Root Variables for Interactive Controller */
+        :root {
+            --rgb-speed: 5s;
+            --color-1: #ff0055;
+            --color-2: #7000ff;
+            --color-3: #00f0ff;
+            --color-4: #00ff66;
+        }
+
+        body {
+            background-color: #050811;
+            color: #f1f5f9;
+        }
+
+        /* Flowing RGB Gradient Background */
+        @keyframes rgbGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .rgb-bg-flowing {
+            background: linear-gradient(
+                270deg,
+                var(--color-1),
+                var(--color-2),
+                var(--color-3),
+                var(--color-4),
+                var(--color-1)
+            );
+            background-size: 400% 400%;
+            animation: rgbGradient var(--rgb-speed) ease infinite;
+        }
+
+        /* Flowing RGB Text Gradient */
+        .rgb-text {
+            background: linear-gradient(
+                270deg,
+                var(--color-1),
+                var(--color-2),
+                var(--color-3),
+                var(--color-4),
+                var(--color-1)
+            );
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rgbGradient var(--rgb-speed) ease infinite;
+        }
+
+        /* Glowing RGB Border Box Wrapper */
+        .rgb-border-box {
+            position: relative;
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 1rem;
+            z-index: 1;
+        }
+
+        .rgb-border-box::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(
+                270deg,
+                var(--color-1),
+                var(--color-2),
+                var(--color-3),
+                var(--color-4),
+                var(--color-1)
+            );
+            background-size: 300% 300%;
+            border-radius: 1.1rem;
+            z-index: -1;
+            animation: rgbGradient var(--rgb-speed) ease infinite;
+            opacity: 0.8;
+            filter: blur(8px);
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .rgb-border-box:hover::before {
+            opacity: 1;
+            filter: blur(14px);
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Discord Glow Special Button */
+        .discord-glow {
+            position: relative;
+            background: #5865F2;
+            transition: all 0.3s ease;
+        }
+
+        .discord-glow::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: #5865F2;
+            border-radius: inherit;
+            filter: blur(10px);
+            opacity: 0.5;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .discord-glow:hover::after {
+            opacity: 1;
+            filter: blur(16px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050811;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-3);
+        }
+
+        .page-view {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .page-hidden {
+            display: none !important;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden selection:bg-cyan-500 selection:text-black">
+
+    <!-- FLOATING RGB CONTROLLER WIDGET -->
+    <div id="rgb-controller" class="fixed bottom-6 right-6 z-50 transition-all duration-300">
+        <button id="toggle-controller-btn" title="Atur Efek RGB" class="w-14 h-14 rounded-full rgb-bg-flowing flex items-center justify-center text-white shadow-2xl text-xl cursor-pointer hover:scale-110 active:scale-95 transition-transform">
+            <i class="fa-solid fa-sliders"></i>
+        </button>
+
+        <div id="controller-panel" class="hidden absolute bottom-16 right-0 w-80 glass-panel p-5 rounded-2xl shadow-2xl border border-white/20 text-slate-100">
+            <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
+                <h4 class="font-orbitron text-sm font-bold tracking-wider text-cyan-400 flex items-center gap-2">
+                    <i class="fa-solid fa-palette"></i> RGB CONTROLLER
+                </h4>
+                <button id="close-panel" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Speed Slider -->
+            <div class="space-y-2 mb-5">
+                <div class="flex justify-between text-xs font-medium text-slate-300">
+                    <span>Kecepatan Animasi</span>
+                    <span id="speed-val" class="text-cyan-400 font-bold">5s</span>
+                </div>
+                <input type="range" id="speed-slider" min="1" max="15" value="5" step="0.5" 
+                       class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+            </div>
+
+            <!-- Color Presets -->
+            <div class="space-y-2">
+                <span class="text-xs font-medium text-slate-300 block">Preset Warna RGB</span>
+                <div class="grid grid-cols-2 gap-2">
+                    <button class="preset-btn text-xs py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 font-semibold transition-all" data-preset="neon">
+                        🌈 Neon Spectrum
+                    </button>
+                    <button class="preset-btn text-xs py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 font-semibold transition-all" data-preset="cyberpunk">
+                        🤖 Robot
+                    </button>
+                    <button class="preset-btn text-xs py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 font-semibold transition-all" data-preset="aurora">
+                        💚 Matrix Aurora
+                    </button>
+                    <button class="preset-btn text-xs py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 font-semibold transition-all" data-preset="synthwave">
+                        🌆 Synthwave
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR HEADER -->
+    <nav class="fixed top-0 left-0 right-0 z-40 glass-panel border-b border-white/10 py-4 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <!-- Glowing Logo -->
+                <button onclick="switchPage('home')" class="flex items-center gap-3 group text-left">
+                    <div class="w-10 h-10 rounded-xl rgb-bg-flowing flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-atom text-xl animate-spin" style="animation-duration: 8s;"></i>
+                    </div>
+                    <span class="font-orbitron font-extrabold text-xl tracking-wider rgb-text">BERM<span class="text-white">ADYA</span></span>
+                </button>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8 font-medium text-sm text-slate-300">
+                    <button onclick="switchPage('home')" class="nav-btn hover:text-cyan-400 transition-colors py-1" data-page="home">Beranda</button>
+                    <button onclick="switchPage('features')" class="nav-btn hover:text-cyan-400 transition-colors py-1" data-page="features">Layanan</button>
+                    <button onclick="switchPage('showcase')" class="nav-btn hover:text-cyan-400 transition-colors py-1" data-page="showcase">Galeri Showcase</button>
+                    <button onclick="switchPage('contact-page')" class="nav-btn text-cyan-400 font-bold hover:text-white transition-colors py-1 flex items-center gap-1.5" data-page="contact-page">
+                        <span>Hubungi Kami</span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                    </button>
+                </div>
+
+                <!-- Right Action Buttons -->
+                <div class="hidden md:flex items-center gap-4">
+                    <!-- DISCORD LINK CTA -->
+                    <a href="https://discord.gg/CkvJP8kRK" target="_blank" class="discord-glow px-4 py-2.5 rounded-xl font-orbitron font-bold text-xs text-white uppercase tracking-wider flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform">
+                        <i class="fa-brands fa-discord text-lg"></i>
+                        <span>Masuk ke Discord</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-3">
+                    <a href="https://discord.gg/CkvJP8kRK" target="_blank" class="discord-glow p-2.5 rounded-xl text-white text-base">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                    <button id="mobile-toggle" class="text-slate-300 hover:text-white focus:outline-none p-2">
+                        <i id="mobile-icon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-4 pb-6 space-y-3 glass-panel mt-3 border-t border-white/10">
+            <button onclick="switchPage('home')" class="mobile-link w-full text-left px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white font-medium">Beranda</button>
+            <button onclick="switchPage('features')" class="mobile-link w-full text-left px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white font-medium">Layanan</button>
+            <button onclick="switchPage('showcase')" class="mobile-link w-full text-left px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white font-medium">Galeri Showcase</button>
+            <button onclick="switchPage('contact-page')" class="mobile-link w-full text-left px-4 py-2.5 rounded-lg text-cyan-400 hover:bg-slate-800 font-bold flex items-center justify-between">
+                <span>Hubungi Kami</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="min-h-screen pt-24">
+
+        <!-- ================= PAGE 1: HOME ================= -->
+        <div id="home-page" class="page-view">
+            <!-- Hero Section -->
+            <section class="relative min-h-[85vh] py-20 flex items-center justify-center overflow-hidden">
+                <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full rgb-bg-flowing opacity-25 blur-[130px] pointer-events-none -z-10"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-white/10 mb-8 animate-bounce">
+                        <span class="w-2 h-2 rounded-full rgb-bg-flowing"></span>
+                        <span class="font-orbitron text-xs font-semibold tracking-widest uppercase text-cyan-400">Pengalaman car meet whit Ilum Garage</span>
+                    </div>
+
+                    <h1 class="font-orbitron text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight uppercase mb-6">
+                        WELCOME TO <br>
+                        <span class="rgb-text">ILUM GARAGE</span>
+                    </h1>
+
+                    <p class="text-slate-400 text-base sm:text-xl max-w-3xl mx-auto leading-relaxed mb-10">
+                        Hadirkan car meet yang sangat menyenangkan,di setaip malam.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+                        <button onclick="switchPage('contact-page')" class="rgb-border-box px-8 py-4 font-orbitron font-bold text-sm tracking-wider text-white uppercase hover:scale-105 transition-transform flex items-center gap-3 w-full sm:w-auto justify-center">
+                            <span>Hubungi Kami</span>
+                            <i class="fa-solid fa-headset text-cyan-400"></i>
+                        </button>
+
+                        <a href="https://discord.gg/CkvJP8kRK" target="_blank" class="discord-glow px-8 py-4 rounded-xl font-orbitron font-bold text-sm tracking-wider text-white uppercase hover:scale-105 transition-transform flex items-center gap-3 w-full sm:w-auto justify-center">
+                            <i class="fa-brands fa-discord text-xl"></i>
+                            <span>Gabung Discord</span>
+                        </a>
+                    </div>
+
+                    <!-- Stats Bar -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-10 border-t border-white/10 max-w-4xl mx-auto">
+                        <div class="p-4">
+                            <p class="font-orbitron text-3xl font-extrabold rgb-text">ILUM</p>
+                            <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">OWNER</p>
+                        </div>
+                        <div class="p-4">
+                            <p class="font-orbitron text-3xl font-extrabold rgb-text">BERMADYA</p>
+                            <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">KEPALA MODERATOR</p>
+                        </div>
+                        <div class="p-4">
+                            <p class="font-orbitron text-3xl font-extrabold rgb-text">NOME</p>
+                            <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">MODERATOR</p>
+                        </div>
+                        <div class="p-4">
+                            <p class="font-orbitron text-3xl font-extrabold rgb-text">WISNU</p>
+                            <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">MODERATOR</p>
+                        </div>
+                        <div class="p-4">
+                            <p class="font-orbitron text-3xl font-extrabold rgb-text">TEGUH</p>
+                            <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">STAFF</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 2: LAYANAN ================= -->
+        <div id="features-page" class="page-view page-hidden">
+            <section class="py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <h2 class="font-orbitron text-xs font-bold text-cyan-400 uppercase tracking-widest mb-3">Solusi Digital</h2>
+                        <p class="font-orbitron text-3xl sm:text-4xl font-extrabold text-white">Layanan Utama Kami</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="rgb-border-box p-8 group">
+                            <div class="w-14 h-14 rounded-xl rgb-bg-flowing flex items-center justify-center text-white text-2xl mb-6 shadow-lg group-hover:rotate-12 transition-transform">
+                                <i class="fa-solid fa-video"></i>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-bold text-white mb-3">Jasa Cinematic</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                Membuat Cinematic mobil keren buat di upload di sosial media
+                            </p>
+                        </div>
+
+                        <div class="rgb-border-box p-8 group">
+                            <div class="w-14 h-14 rounded-xl rgb-bg-flowing flex items-center justify-center text-white text-2xl mb-6 shadow-lg group-hover:rotate-12 transition-transform">
+                                <i class="fa-solid fa-wrench"></i>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-bold text-white mb-3">Open jasa modif</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                Membuat mobil kalian menjadi keren,dengan konsep bisa di sesuaikan dengan keinginan custemer
+                            </p>
+                        </div>
+
+                        <div class="rgb-border-box p-8 group">
+                            <div class="w-14 h-14 rounded-xl rgb-bg-flowing flex items-center justify-center text-white text-2xl mb-6 shadow-lg group-hover:rotate-12 transition-transform">
+                                <i class="fa-solid fa-car"></i>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-bold text-white mb-3">Car meet</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                mengdakan car meet yang sangat menyenangkan di setiap live.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 3: GALERI SHOWCASE ================= -->
+        <div id="showcase-page" class="page-view page-hidden">
+            <section class="py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <h2 class="font-orbitron text-xs font-bold text-cyan-400 uppercase tracking-widest mb-3">Portfolio</h2>
+                        <p class="font-orbitron text-3xl sm:text-4xl font-extrabold text-white">Galeri Ilum Garage</p>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl overflow-hidden group hover:border-cyan-400/50 transition-all duration-300">
+                        <div class="glass-panel rounded-2xl overflow-hidden group hover:border-cyan-400/50 transition-all duration-300">
+                            <div class="relative overflow-hidden aspect-video">
+                                <img src="https://i.ibb.co.com/r2SzRTGh/Roblox-9-21-2026-10-58-12-PM.png" 
+                                     alt="Roblox-9-21-2026-10-58-12-PM" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                     onerror="this.src='https://placehold.co/600x400/0f172a/ffffff?text=Discord+Bot'">
+                            </div>
+                            <div class="p-6">
+                                <h4 class="font-orbitron font-bold text-white text-lg">CAR MEET DI CAFE</h4>
+                                <p class="text-xs text-slate-400 mt-2">sangat menyenangkan jika kumpul sambil ngopi</p>
+                            </div> 
+                        </div>
+
+                        <div class="glass-panel rounded-2xl overflow-hidden group hover:border-cyan-400/50 transition-all duration-300">
+                            <div class="relative overflow-hidden aspect-video">
+                                <img src="https://i.ibb.co.com/PzjNVGs7/Roblox-9-12-2026-10-58-05-PM.png" 
+                                     alt="Roblox-9-roblok mantap PM" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                     onerror="this.src='https://placehold.co/600x400/0f172a/ffffff?text=Discord+Bot'">
+                            </div>
+                            <div class="p-6">
+                                <h4 class="font-orbitron font-bold text-white text-lg">CAR MEET DI IMX</h4>
+                                <p class="text-xs text-slate-400 mt-2">car meet dengan adu fitmen mobil</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel rounded-2xl overflow-hidden group hover:border-cyan-400/50 transition-all duration-300">
+                            <div class="relative overflow-hidden aspect-video">
+                                <img src="https://i.ibb.co.com/yCMfmSk/image0.jpg" 
+                                     alt="image0" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                     onerror="this.src='https://placehold.co/600x400/0f172a/ffffff?text=Quantum+Core'">
+                            </div>
+                            <div class="p-6">
+                                <h4 class="font-orbitron font-bold text-white text-lg">CAR MEET DI RUMAH MILEA</h4>
+                                <p class="text-xs text-slate-400 mt-2">Berkumpul dengan menikmati syahdu nya mejadi DILAN</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 4: HUBUNGI KAMI (NEW DIRECTORY PAGE) ================= -->
+        <div id="contact-page" class="page-view page-hidden">
+            <section class="py-12">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    
+                    <!-- Page Title -->
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-cyan-500/30 text-cyan-400 font-orbitron text-xs font-bold mb-4 uppercase tracking-widest">
+                            <i class="fa-solid fa-headset"></i> Layanan Kontak Direct
+                        </div>
+                        <h1 class="font-orbitron text-3xl sm:text-5xl font-black text-white mb-4">Hubungi Kami</h1>
+                        <p class="text-slate-400 text-base">Pilih saluran komunikasi resmi kami untuk terhubung secara cepat dan langsung tanpa hambatan.</p>
+                    </div>
+
+                    <!-- Main Discord Card Highlight -->
+                    <div class="mb-12">
+                        <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-indigo-500/30 relative overflow-hidden group hover:border-indigo-500 transition-all duration-300">
+                            <!-- Background Accent Glow -->
+                            <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                            <div class="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+                                <div class="flex items-center gap-6">
+                                    <div class="w-20 h-20 rounded-2xl discord-glow flex items-center justify-center text-white text-4xl shrink-0">
+                                        <i class="fa-brands fa-discord"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-3">
+                                            <h3 class="font-orbitron text-2xl font-black text-white">Discord Server Komunitas</h3>
+                                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30 flex items-center gap-1.5">
+                                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                                ONLINE
+                                            </span>
+                                        </div>
+                                        <p class="text-slate-300 text-sm mt-2 max-w-xl">
+                                            Bergabunglah bersama ribuan anggota di server Discord resmi kami untuk dukungan teknis 24/7, berdiskusi, dan mendapatkan update terbaru.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <a href="https://discord.gg/CkvJP8kRK" target="_blank" class="discord-glow px-8 py-4 rounded-xl font-orbitron font-bold text-sm text-white uppercase tracking-wider flex items-center gap-3 shrink-0 hover:scale-105 active:scale-95 transition-transform">
+                                    <span>Gabung Server Discord</span>
+                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Direct Contact Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Tiktok Direct Card -->
+                        <div class="rgb-border-box p-8 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                                    <i class="fa-brands fa-tiktok"></i>
+                                </div>
+                                <h4 class="font-orbitron font-bold text-xl text-white mb-2">Tik tok</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed mb-6">
+                                    Hubungi tim admin secara langsung melalui tik tok untuk konsultasi cepat.
+                                </p>
+                            </div>
+                            <a href="https://www.tiktok.com/@ilum507?_r=1&_t=ZS-9AM4xoON1S0" target="_blank" class="w-full py-3 rounded-xl glass-panel border border-sky-500/30 text-sky-300 font-orbitron text-xs font-bold text-center uppercase tracking-wider hover:bg-sky-500 hover:text-white transition-all">
+                                DM via tiktok
+                            </a>
+                        </div>
+
+                        <!-- Discord Bermadya Support Card -->
+                        <div class="rgb-border-box p-8 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                                    <i class="fa-brands fa-discord"></i>
+                                </div>
+                                <h4 class="font-orbitron font-bold text-xl text-white mb-2">Discord Bermadya</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed mb-6">
+                                    Konsultasi dengan lebuh cepat hubungi Beermadya.
+                                </p>
+                            </div>
+                            <a href="https://discord.gg/k5FsY6yU" class="w-full py-3 rounded-xl glass-panel border border-rose-500/30 text-rose-300 font-orbitron text-xs font-bold text-center uppercase tracking-wider hover:bg-rose-500 hover:text-white transition-all">
+                                DISCORD BERMADYA
+                            </a>
+                        </div>
+
+                        <!-- Headquarters Location Card -->
+                         <div class="rgb-border-box p-8 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-14 h-14 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-rupiah-sign"></i>
+                                </div>
+                                <h4 class="font-orbitron font-bold text-xl text-white mb-2">TAKO.ID</h4>
+                                <p class="text-xs text-slate-400 leading-relaxed mb-6">
+                                    VIP/ SUPPORT.
+                                </p>
+                            </div>
+                            <a href="https://tako.id/ilumm" class="w-full py-3 rounded-xl glass-panel border border-rose-500/30 text-rose-300 font-orbitron text-xs font-bold text-center uppercase tracking-wider hover:bg-rose-500 hover:text-white transition-all">
+                                tako.id
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <!-- Social Media Links Section -->
+                    <div class="mt-16 glass-panel p-8 rounded-2xl text-center">
+                        <h4 class="font-orbitron font-bold text-white text-sm uppercase tracking-widest mb-6">Ikuti Jejaring Sosial Resmi</h4>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <a href="https://discord.gg/CkvJP8kRK" target="_blank" class="px-5 py-3 rounded-xl bg-slate-900 border border-white/10 text-slate-300 hover:text-white hover:border-cyan-400 flex items-center gap-3 transition-all">
+                                <i class="fa-brands fa-discord text-indigo-400 text-lg"></i>
+                                <span class="font-orbitron text-xs font-semibold">Discord</span>
+                            </a>
+                            <a href="https://www.tiktok.com/@r.madya?_r=1&_t=ZS-9AM6DaMKIE8" class="px-5 py-3 rounded-xl bg-slate-900 border border-white/10 text-slate-300 hover:text-white hover:border-cyan-400 flex items-center gap-3 transition-all">
+                                <i class="fa-brands fa-tiktok  text-black-500 text-lg"></i>
+                                <span class="font-orbitron text-xs font-semibold">tiKtok</span>
+                            </a>
+                            <a href="https://www.instagram.com/ilumgarage?stkn=c2xuczR4dDBvdG1u" class="px-5 py-3 rounded-xl bg-slate-900 border border-white/10 text-slate-300 hover:text-white hover:border-cyan-400 flex items-center gap-3 transition-all">
+                                <i class="fa-brands fa-instagram text-pink-500 text-lg"></i>
+                                <span class="font-orbitron text-xs font-semibold">Instagram</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-white/10 bg-slate-950 text-slate-500 text-sm mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            <div class="flex justify-center items-center gap-3">
+                <div class="w-8 h-8 rounded-lg rgb-bg-flowing flex items-center justify-center text-white text-sm">
+                    <i class="fa-solid fa-atom"></i>
+                </div>
+                <span class="font-orbitron font-bold text-white tracking-widest text-lg">BERMADYA</span>
+            </div>
+
+            <!-- Discord Banner inside Footer -->
+            <div class="max-w-md mx-auto">
+                <a href="https://discord.gg/CkvJP8kRK" target="_blank" class="discord-glow p-3 rounded-xl text-white font-orbitron font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-discord text-lg"></i>
+                    <span>Masuk ke Discord Server Resmi</span>
+                </a>
+            </div>
+
+            <p class="text-xs text-slate-600">&copy; 2026 BERMADYA LINK. Ilum Garage Community</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 1. Multi-Page View Switching Navigation
+        function switchPage(pageId) {
+            const pages = document.querySelectorAll('.page-view');
+            pages.forEach(page => {
+                page.classList.add('page-hidden');
+            });
+
+            const targetPage = document.getElementById(`${pageId}-page`) || document.getElementById(pageId);
+            if(targetPage) {
+                targetPage.classList.remove('page-hidden');
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Update active state in menu
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                if(btn.getAttribute('data-page') === pageId || (pageId === 'contact-page' && btn.getAttribute('data-page') === 'contact-page')) {
+                    btn.classList.add('text-cyan-400');
+                } else if(btn.getAttribute('data-page') !== 'contact-page') {
+                    btn.classList.remove('text-cyan-400');
+                }
+            });
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+            document.getElementById('mobile-icon').classList.add('fa-bars');
+            document.getElementById('mobile-icon').classList.remove('fa-xmark');
+        }
+
+        // 2. Interactive Controller Widget Logic
+        const toggleBtn = document.getElementById('toggle-controller-btn');
+        const panel = document.getElementById('controller-panel');
+        const closeBtn = document.getElementById('close-panel');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedVal = document.getElementById('speed-val');
+        const presetBtns = document.querySelectorAll('.preset-btn');
+
+        toggleBtn.addEventListener('click', () => panel.classList.toggle('hidden'));
+        closeBtn.addEventListener('click', () => panel.classList.add('hidden'));
+
+        speedSlider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            speedVal.textContent = `${val}s`;
+            document.documentElement.style.setProperty('--rgb-speed', `${val}s`);
+        });
+
+        // Color Presets
+        const presets = {
+            neon: ['#ff0055', '#7000ff', '#00f0ff', '#00ff66'],
+            cyberpunk: ['#ff007f', '#00f0ff', '#ffe600', '#ff0055'],
+            aurora: ['#00ff87', '#60efff', '#0061ff', '#60efff'],
+            synthwave: ['#f72585', '#7209b7', '#3a0ca3', '#4cc9f0']
+        };
+
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const presetKey = btn.getAttribute('data-preset');
+                const colors = presets[presetKey];
+                if(colors) {
+                    document.documentElement.style.setProperty('--color-1', colors[0]);
+                    document.documentElement.style.setProperty('--color-2', colors[1]);
+                    document.documentElement.style.setProperty('--color-3', colors[2]);
+                    document.documentElement.style.setProperty('--color-4', colors[3]);
+                }
+            });
+        });
+
+        // 3. Mobile Navigation Toggle
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIcon = document.getElementById('mobile-icon');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileIcon.classList.toggle('fa-bars');
+            mobileIcon.classList.toggle('fa-xmark');
+        });
+
+        // 4. Copy Address Helper
+        function copyHQLocation() {
+            const textToCopy = "NEXA Cyber Studio, Digital Sector 7, Cyber District";
+            
+            // Clipboard Copying using ExecCommand as fallback for iFrame sandbox
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = textToCopy;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            const copyTextSpan = document.getElementById('copy-text');
+            copyTextSpan.textContent = "Alamat Tersalin!";
+            setTimeout(() => {
+                copyTextSpan.textContent = "Salin Alamat HQ";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
